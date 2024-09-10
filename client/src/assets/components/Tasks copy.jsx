@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 // import TaskItem from './TaskItem';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import TaskSec from './TaskSec';
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
@@ -39,7 +38,16 @@ const Tasks = () => {
         <ul className='flex justify-center align-middle gap-3 text-left flex-wrap'>
           {tasks.map(task => (
           
-              <TaskSec task={task} />
+              <li key={task.id} className="bg-[#393c3f] w-72 p-4 mb-2 shadow-md rounded ">
+              <h2 className="text-2xl font-semibold">{task.title}</h2>
+              <p className='truncate'>{task.description}</p>
+           <button 
+           onClick={()=>{handleClick(task.id)}}  className='underline text-blue-300 mr-2'>
+            Edit</button>
+           <button 
+           onClick={()=>{handleDel(task.id)}}  className='underline text-red-300 mr-2'>
+            Delete</button>
+            </li>
 
 
           ))}
