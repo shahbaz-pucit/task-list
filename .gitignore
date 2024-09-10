@@ -1,0 +1,14 @@
+# Exclude all `.env` files
+.env
+
+# Exclude `node_modules` folder
+./backend/node_modules
+
+# Exclude all `.log` files in any folder
+*.log
+
+# Exclude the `build` folder
+build/
+
+# Exclude all `.DS_Store` files (macOS)
+.DS_Store
