@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
@@ -7,23 +9,25 @@ const app = express();
 const port = 3002;
 
 // Middleware
+//using cors to allow to handle requests from frontend
 app.use(cors({
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 }))
+
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
 
-// MySQL Database Connection note: 
+// MySQL Database Connection - fetching variables from .env file
 const db = mysql.createConnection({
-  host: 'techtriggered.com',
-  user: 'techtrig_task',        
-  password: 'Testdb@123',
-  database: 'techtrig_task'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
 });
-
+//error Handling
 db.connect((err) => {
   if (err) {
     console.error('Error connecting to the database:', err);
@@ -56,7 +60,7 @@ app.get('/tasks', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     res.json(results);
-    console.log(results);
+    // console.log(results);
     
   });
 });
@@ -87,9 +91,6 @@ app.put('/tasks/:id', (req, res) => {
       console.error('Error updating the task:', err);
       return res.status(500).json({ error: 'Database error' });
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Task not found' });
-    }
     res.json({ message: 'Task updated' });
   });
 });
@@ -103,9 +104,7 @@ app.delete('/tasks/:id', (req, res) => {
       console.error('Error deleting task:', err);
       return res.status(500).json({ error: 'Database error' });
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Task not found' });
-    }
+
     res.json({ message: 'Task deleted' });
   });
 });
